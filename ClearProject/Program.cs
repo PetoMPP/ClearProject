@@ -13,12 +13,17 @@ namespace ClearProject
       var gitService = new GitService(console);
       var cleaner = new Cleaner();
       var dirPath = args.FirstOrDefault() ?? console.AskForDirectoryPath();
+      var clearNuGetCache = args.Length > 1 && (args[1] == "--nuget" || args[1] == "-n");
 
       _stopwatch.Start();
       console.StartProgressMessage("Working");
 
       await gitService.CreateStash();
       var result = cleaner.ClearDirectory(dirPath);
+      if (clearNuGetCache)
+      {
+        result += cleaner.ClearNuGetCache(dirPath);
+      }
       await gitService.ResetWorkingDirectory();
       await gitService.RestoreStash();
       console.StopProgressMessage();
