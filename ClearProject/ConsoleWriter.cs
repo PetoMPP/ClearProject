@@ -3,6 +3,7 @@
   internal interface IConsoleWriter
   {
     string AskForDirectoryPath();
+    bool AskForNuGetCacheClear();
     void StartProgressMessage(string message);
     void StopProgressMessage();
     void Write(string? value);
@@ -28,8 +29,14 @@
 
     public string AskForDirectoryPath()
     {
-      Write("Please enter cleared .NET project path: ");
+      Write("Please enter cleared .NET solution path: ");
       return Console.ReadLine() ?? string.Empty;
+    }
+
+    public bool AskForNuGetCacheClear()
+    {
+      Write("Do you want to clear NuGet cache? (y/n): ");
+      return Console.ReadLine()?.ToLower() == "y";
     }
 
     public void Write(string? value)
